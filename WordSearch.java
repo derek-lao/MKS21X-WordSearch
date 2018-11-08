@@ -42,7 +42,7 @@ public class WordSearch{
         }
         if(r<data.length-1)
         {
-          answer+="\n";
+          answer+="\n\n";
         }
         else
         {
