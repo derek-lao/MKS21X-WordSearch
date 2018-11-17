@@ -1,5 +1,6 @@
 import java.util.*; //random, scanner, arraylist
 import java.io.*; //file, filenotfoundexception
+import java.lang.*;
 public class WordSearch{
     private char[][] data;
 
@@ -33,7 +34,7 @@ public class WordSearch{
       }
       wordsToAdd=new ArrayList<String>();
       wordsAdded=new ArrayList<String>();
-      randgen = new Random();
+      randgen = new Random(System.currentTimeMillis());
       File f = new File(fileName);//can combine
       Scanner in = new Scanner(f);//into one line
 
@@ -45,12 +46,30 @@ public class WordSearch{
       }
 
     //Choose a randSeed using the clock random
-      randgen=new Random(System.currentTimemillis());
+
 
     }
 
-    public WordSearch(int rows, int cols, String fileName, int randSeed){
+    public WordSearch(int rows, int cols, String fileName, int randSeed) throws FileNotFoundException{
+      if((rows>0)&&(cols>0)){
+        data=new char[rows][cols];
+        clear();
+      }
+      wordsToAdd=new ArrayList<String>();
+      wordsAdded=new ArrayList<String>();
+      randgen=randSeed;
+      File f = new File(fileName);//can combine
+      Scanner in = new Scanner(f);//into one line
 
+        //NOW read the file here...
+      while(in.hasNext())
+      {
+        String word=in.next();
+        wordsToAdd.add(word);
+      }
+
+    //Choose a randSeed using the clock random
+      randgen=new Random(System.currentTimeMillis());
     }
     //Use the random seed specified.
 
@@ -71,9 +90,6 @@ public class WordSearch{
      *separated by newlines.
      */
     public String toString(){
-      File f = new File(fileName);//can combine
-      Scanner in = new Scanner(f);//into one line
-
       String answer="|";
       for(int r=0;r<data.length;r++)
       {
@@ -98,12 +114,12 @@ public class WordSearch{
         }
       }
       answer+="\nWords:";
-      while(in.hasNext())
+      for(int i=0;i<wordsAdded.size();i++)
       {
-        String word=in.next();
+        String word=wordsAdded.get(i);
         answer+=(" "+word+",");
       }
-      answer=answer.substring(0,answer.length()-1)+" (seed: "+randSeed+")";
+      answer=answer.substring(0,answer.length()-1)+" (seed: " +randgen+ ")";
       return answer;
     }
 
@@ -215,7 +231,8 @@ public class WordSearch{
       for(int i=0;i<word.length();i++)
       {
         data[row+(i*rowIncrement)][col+(i*colIncrement)]=word.charAt(i);
-        wordsAdded.add(0,wordsToAdd.remove(0));
+        wordsToAdd.remove(word);
+        wordsAdded.add(word);
       }
       return true;
     }
@@ -230,11 +247,6 @@ public class WordSearch{
 
     }
     public static void main(String[] args){
-      for(int i=0, r=0, c=0;i<4;i++,r++,c++)
-      {
-        System.out.println(i+", "+r+", "+c);
-      }
-      System.out.println("done");
     }
 
 }
