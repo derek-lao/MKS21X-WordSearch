@@ -34,10 +34,9 @@ public class WordSearch{
       }
       wordsToAdd=new ArrayList<String>();
       wordsAdded=new ArrayList<String>();
-      randgen = new Random(System.currentTimeMillis());
+
       File f = new File(fileName);//can combine
       Scanner in = new Scanner(f);//into one line
-
         //NOW read the file here...
       while(in.hasNext())
       {
@@ -46,7 +45,7 @@ public class WordSearch{
       }
 
     //Choose a randSeed using the clock random
-
+      randgen=new Random(System.currentTimeMillis());
 
     }
 
@@ -57,7 +56,6 @@ public class WordSearch{
       }
       wordsToAdd=new ArrayList<String>();
       wordsAdded=new ArrayList<String>();
-      randgen=randSeed;
       File f = new File(fileName);//can combine
       Scanner in = new Scanner(f);//into one line
 
@@ -69,7 +67,7 @@ public class WordSearch{
       }
 
     //Choose a randSeed using the clock random
-      randgen=new Random(System.currentTimeMillis());
+      randgen=new Random(randSeed);
     }
     //Use the random seed specified.
 
@@ -243,9 +241,44 @@ public class WordSearch{
      *[ 0,-1] would add towards the left because (col - 1), with no row change
      */
 
-    public boolean addAllWords(){
 
+
+    public boolean addAllWords(){
+      Random generator=new Random();
+      int position=Math.abs(generator.nextInt())%wordsToAdd.size();
+      for(int n=0;n<wordsToAdd.size();n++)
+      {
+        int position=Math.abs(generator.nextInt())%wordsToAdd.size();
+        int randomrow=Math.abs(generator.nextInt())%data.length;
+        int randomcol=Math.abs(generator.nextInt())%data[0].length;
+        int randomrowIncrement=generator.nextInt()%2;
+        int randomcolIncrement=generator.nextInt()%2;
+        for(int i=0;i<100;i++)
+        {
+          if(addWord(wordsToAdd.get(position),randomrow,randomcol,randomrowIncrement,randomcolIncrement))
+          {
+            i=99;
+          }
+          else
+          {
+            randomrow=Math.abs(generator.nextInt())%data.length;
+            randomcol=Math.abs(generator.nextInt())%data[0].length;
+          }
+        }
+      }
     }
+
+    //      Choose a random word, and a random direction (rowIncrement/colIncrement)
+    // Try to add that word to different starting positions* until:
+    // you successfully add the word
+    // you run out of positional tries
+    // Repeat this process until you added all of the words, or you tried to add unsuccessfully too many times in a row.
+    // OPTIONAL    Optimize your addAllWords such that:
+    // You do not try to add words to positions that would not fit the word on the board. **
+    // Use the rowIncrement/colIncrement to decide what the range of valid row/col should be.
+    //
+    //     *Each try in step 2 only changes the position of the start, not the direction or word
+    //     **A five letter word that is meant to be added across to the right should not START in the last 4 columns of the board
     public static void main(String[] args){
     }
 
