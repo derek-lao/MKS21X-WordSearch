@@ -72,6 +72,32 @@ public class WordSearch{
     }
     //Use the random seed specified.
 
+    private void fillWithLetters(){
+      for(int r=0;r<data.length;r++)
+      {
+        for(int c=0;c<data[0].length;c++)
+        {
+          if(data[r][c]=='_')
+          {
+            int letter=Math.abs(randgen.nextInt()%('Z'-'A'))+'A';
+            data[r][c]=(char)letter;
+          }
+        }
+      }
+    }
+
+    private void demolishLetters(){
+      for(int r=0;r<data.length;r++)
+      {
+        for(int c=0;c<data[0].length;c++)
+        {
+          if(data[r][c]=='_')
+          {
+            data[r][c]=' ';
+          }
+        }
+      }
+    }
 
     /**Set all values in the WordSearch to underscores'_'*/
     private void clear(){
@@ -174,7 +200,6 @@ public class WordSearch{
       }
       wordsToAdd.remove(word);
       wordsAdded.add(word);
-      System.out.println(wordsToAdd);
       return true;
     }
 
@@ -187,15 +212,14 @@ public class WordSearch{
 
 
     private void addAllWords(){
-      Random generator=new Random(seed);
       int increment=wordsToAdd.size();
       for(int n=0;n<increment;n++)
       {
-        int position=Math.abs(generator.nextInt())%wordsToAdd.size();
-        int randomrow=Math.abs(generator.nextInt())%data.length;
-        int randomcol=Math.abs(generator.nextInt())%data[0].length;
-        int randomrowIncrement=generator.nextInt()%2;
-        int randomcolIncrement=generator.nextInt()%2;
+        int position=Math.abs(randgen.nextInt())%wordsToAdd.size();
+        int randomrow=Math.abs(randgen.nextInt())%data.length;
+        int randomcol=Math.abs(randgen.nextInt())%data[0].length;
+        int randomrowIncrement=randgen.nextInt()%2;
+        int randomcolIncrement=randgen.nextInt()%2;
         for(int i=0;i<1000;i++)
         {
           if(addWord(wordsToAdd.get(position),randomrow,randomcol,randomrowIncrement,randomcolIncrement))
@@ -204,8 +228,8 @@ public class WordSearch{
           }
           else
           {
-            randomrow=Math.abs(generator.nextInt())%data.length;
-            randomcol=Math.abs(generator.nextInt())%data[0].length;
+            randomrow=Math.abs(randgen.nextInt())%data.length;
+            randomcol=Math.abs(randgen.nextInt())%data[0].length;
           }
         }
       }
@@ -229,7 +253,9 @@ public class WordSearch{
       " three things:  \n\n1. java WordSearch rows cols filename\n2."+
       " java WordSearch rows cols filename randomSeed\n3. java WordSearch"+
       " rows cols filename randomSeed answers\n *For the third one, in the"+
-      " answers part, you must type \"key\"\n\nAlright you dummy, go do that"+
+      " answers part, you must type \"key\"\n *row and col must be nonzero"+
+      " positive integers\n *randomSeed must be a nonnegative integer"+
+      " between 0 and 10000 inclusive\n\nAlright you dummy, go do that"+
       " wordsearch";
       int rowCall;
       int colCall;
@@ -250,6 +276,7 @@ public class WordSearch{
           filenameCall=args[2];
           dummy=new WordSearch(rowCall,colCall,filenameCall);
           dummy.addAllWords();
+          dummy.fillWithLetters();
           System.out.println(dummy.toString());
         }
         if(args.length==4)
@@ -258,9 +285,17 @@ public class WordSearch{
           colCall=Integer.parseInt(args[1]);
           filenameCall=args[2];
           seedCall=Integer.parseInt(args[3]);
-          dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
-          dummy.addAllWords();
-          System.out.println(dummy.toString());
+          if(seedCall<0||seedCall>10000)
+          {
+            System.out.println(instructions);
+          }
+          else
+          {
+            dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
+            dummy.addAllWords();
+            dummy.fillWithLetters();
+            System.out.println(dummy.toString());
+          }
         }
         if(args.length==5)
         {
@@ -268,12 +303,27 @@ public class WordSearch{
           colCall=Integer.parseInt(args[1]);
           filenameCall=args[2];
           seedCall=Integer.parseInt(args[3]);
-          answerCall=args[4];
-          if(!answerCall.equals("key"))
+          if(seedCall<0||seedCall>10000)
           {
-            dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
-            dummy.addAllWords();
-            System.out.println(dummy.toString());
+            System.out.println(instructions);
+          }
+          else
+          {
+            answerCall=args[4];
+            if(!answerCall.equals("key"))
+            {
+              dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
+              dummy.addAllWords();
+              dummy.fillWithLetters();
+              System.out.println(dummy.toString());
+            }
+            else
+            {
+              dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
+              dummy.addAllWords();
+              dummy.demolishLetters();
+              System.out.println(dummy.toString());
+            }
           }
         }
       }
