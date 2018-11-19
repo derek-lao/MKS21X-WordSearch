@@ -208,6 +208,7 @@ public class WordSearch{
     //     *Each try in step 2 only changes the position of the start, not the direction or word
     //     **A five letter word that is meant to be added across to the right should not START in the last 4 columns of the board
     public static void main(String[] args){
+      WordSearch dummy;
       String instructions= "Hey buddy, you kinda suck at this,"+
       " lemme tell ya what to do: \n\nYou can do some of these"+
       " three things:  \n\n1. java WordSearch rows cols filename\n2."+
@@ -215,9 +216,52 @@ public class WordSearch{
       " rows cols filename randomSeed answers\n *For the third one, in the"+
       " answers part, you must type \"key\"\n\nAlright you dummy, go do that"+
       " wordsearch";
+      int rowCall;
+      int colCall;
+      String filenameCall;
+      int seedCall;
+      String answerCall;
       if(args.length<3)
       {
         System.out.println(instructions);
+      }
+
+      try
+      {
+        Integer.parseInt("filename");
+      }
+      catch(NumberFormatException e)
+      {
+        System.out.println(instructions);
+      }
+
+      if(args.length==3)
+      {
+        rowCall=Integer.parseInt(args[0]);
+        colCall=Integer.parseInt(args[1]);
+        dummy=new WordSearch(rowCall,colCall,filenameCall);
+        System.out.println(dummy.toString());
+      }
+      if(args.length==4)
+      {
+        rowCall=Integer.parseInt(args[0]);
+        colCall=Integer.parseInt(args[1]);
+        filenameCall=args[2];
+        seedCall=Integer.parseInt(args[3]);
+        dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
+        System.out.println(dummy.toString());
+      }
+      if(args.length==5)
+      {
+        rowCall=Integer.parseInt(args[0]);
+        colCall=Integer.parseInt(args[1]);
+        filenameCall=args[2];
+        seedCall=Integer.parseInt(args[3]);
+        if(!answerCall.equals("key"))
+        {
+          dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
+          System.out.println(dummy.toString());
+        }
       }
     }
 
