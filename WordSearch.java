@@ -79,7 +79,7 @@ public class WordSearch{
         {
           if(data[r][c]=='_')
           {
-            int letter=Math.abs(randgen.nextInt()%('Z'-'A'))+'A';
+            int letter=Math.abs(randgen.nextInt()%('Z'+1-'A'))+'A';
             data[r][c]=(char)letter;
           }
         }
