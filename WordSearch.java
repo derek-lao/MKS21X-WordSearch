@@ -188,18 +188,19 @@ public class WordSearch{
 
     private void addAllWords(){
       Random generator=new Random(seed);
-      for(int n=0;n<wordsToAdd.size();n++)
+      int increment=wordsToAdd.size();
+      for(int n=0;n<increment;n++)
       {
         int position=Math.abs(generator.nextInt())%wordsToAdd.size();
         int randomrow=Math.abs(generator.nextInt())%data.length;
         int randomcol=Math.abs(generator.nextInt())%data[0].length;
         int randomrowIncrement=generator.nextInt()%2;
         int randomcolIncrement=generator.nextInt()%2;
-        for(int i=0;i<100;i++)
+        for(int i=0;i<1000;i++)
         {
           if(addWord(wordsToAdd.get(position),randomrow,randomcol,randomrowIncrement,randomcolIncrement))
           {
-            i=99;
+            i=999;
           }
           else
           {
