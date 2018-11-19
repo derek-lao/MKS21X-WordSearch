@@ -11,10 +11,10 @@ public class WordSearch{
     private Random randgen;
 
     //all words from a text file get added to wordsToAdd, indicating that they have not yet been added
-    private ArrayList<String>wordsToAdd;
+    private ArrayList<String> wordsToAdd;
 
     //all words that were successfully added get moved into wordsAdded.
-    private ArrayList<String>wordsAdded;
+    private ArrayList<String> wordsAdded;
 
     /**Initialize the grid to the size specified
      *and fill all of the positions with '_'
@@ -45,8 +45,8 @@ public class WordSearch{
       }
 
     //Choose a randSeed using the clock random
-      seed= (int)System.currentTimeMillis()%10001;
-      randgen=new Random(seed);
+      seed = (int)System.currentTimeMillis()%10001;
+      randgen = new Random(seed);
 
     }
 
@@ -67,6 +67,7 @@ public class WordSearch{
         wordsToAdd.add(word);
       }
 
+      seed=randSeed;
       randgen=new Random(randSeed);
     }
     //Use the random seed specified.
@@ -137,7 +138,7 @@ public class WordSearch{
      */
     private boolean addWord(String word,int row, int col, int rowIncrement, int colIncrement){
       if((rowIncrement==0&&colIncrement==0)
-      ||(Math.abs(rowIncrement)>1&&Math.abs(colIncrement)>1))
+      ||(Math.abs(rowIncrement)>1||Math.abs(colIncrement)>1))
       {
         return false;
       }
@@ -145,11 +146,13 @@ public class WordSearch{
       {
         int rowPosition = row+(i*rowIncrement);
         int colPosition = col+(i*colIncrement);
-        if(rowPosition>data.length           || rowPosition<0 ||
-        colPosition>data[rowPosition].length || colPosition<0)
+        if(rowPosition>=data.length           || rowPosition<0 ||
+        colPosition>=data[0].length || colPosition<0)
         {
           return false;
         }
+        //checked all out of bounds stuff
+
         else
         {
           continue;
@@ -157,10 +160,21 @@ public class WordSearch{
       }
       for(int i=0;i<word.length();i++)
       {
-        data[row+(i*rowIncrement)][col+(i*colIncrement)]=word.charAt(i);
-        wordsToAdd.remove(word);
-        wordsAdded.add(word);
+        if(data[row+(i*rowIncrement)][col+(i*colIncrement)]!='_')
+        {
+          if(data[row+(i*rowIncrement)][col+(i*colIncrement)]!=word.charAt(i))
+          {
+            return false;
+          }
+        }
       }
+      for(int i=0;i<word.length();i++)
+      {
+        data[row+(i*rowIncrement)][col+(i*colIncrement)]=word.charAt(i);
+      }
+      wordsToAdd.remove(word);
+      wordsAdded.add(word);
+      System.out.println(wordsToAdd);
       return true;
     }
 
@@ -228,40 +242,49 @@ public class WordSearch{
 
       try
       {
-        Integer.parseInt("filename");
+        if(args.length==3)
+        {
+          rowCall=Integer.parseInt(args[0]);
+          colCall=Integer.parseInt(args[1]);
+          filenameCall=args[2];
+          dummy=new WordSearch(rowCall,colCall,filenameCall);
+          dummy.addAllWords();
+          System.out.println(dummy.toString());
+        }
+        if(args.length==4)
+        {
+          rowCall=Integer.parseInt(args[0]);
+          colCall=Integer.parseInt(args[1]);
+          filenameCall=args[2];
+          seedCall=Integer.parseInt(args[3]);
+          dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
+          dummy.addAllWords();
+          System.out.println(dummy.toString());
+        }
+        if(args.length==5)
+        {
+          rowCall=Integer.parseInt(args[0]);
+          colCall=Integer.parseInt(args[1]);
+          filenameCall=args[2];
+          seedCall=Integer.parseInt(args[3]);
+          answerCall=args[4];
+          if(!answerCall.equals("key"))
+          {
+            dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
+            dummy.addAllWords();
+            System.out.println(dummy.toString());
+          }
+        }
       }
       catch(NumberFormatException e)
       {
+        e.printStackTrace();
         System.out.println(instructions);
       }
-
-      if(args.length==3)
+      catch(FileNotFoundException e)
       {
-        rowCall=Integer.parseInt(args[0]);
-        colCall=Integer.parseInt(args[1]);
-        dummy=new WordSearch(rowCall,colCall,filenameCall);
-        System.out.println(dummy.toString());
-      }
-      if(args.length==4)
-      {
-        rowCall=Integer.parseInt(args[0]);
-        colCall=Integer.parseInt(args[1]);
-        filenameCall=args[2];
-        seedCall=Integer.parseInt(args[3]);
-        dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
-        System.out.println(dummy.toString());
-      }
-      if(args.length==5)
-      {
-        rowCall=Integer.parseInt(args[0]);
-        colCall=Integer.parseInt(args[1]);
-        filenameCall=args[2];
-        seedCall=Integer.parseInt(args[3]);
-        if(!answerCall.equals("key"))
-        {
-          dummy=new WordSearch(rowCall,colCall,filenameCall,seedCall);
-          System.out.println(dummy.toString());
-        }
+        e.printStackTrace();
+        System.out.println(instructions);
       }
     }
 
