@@ -200,6 +200,7 @@ public class WordSearch{
       }
       wordsToAdd.remove(word);
       wordsAdded.add(word);
+      //System.out.println(wordsToAdd);
       return true;
     }
 
@@ -216,15 +217,26 @@ public class WordSearch{
       for(int n=0;n<increment;n++)
       {
         int position=Math.abs(randgen.nextInt())%wordsToAdd.size();
+        String randomword=wordsToAdd.get(position);
         int randomrow=Math.abs(randgen.nextInt())%data.length;
         int randomcol=Math.abs(randgen.nextInt())%data[0].length;
         int randomrowIncrement=randgen.nextInt()%2;
-        int randomcolIncrement=randgen.nextInt()%2;
-        for(int i=0;i<1000;i++)
+        int randomcolIncrement;
+        if(randomrowIncrement==0)
         {
-          if(addWord(wordsToAdd.get(position),randomrow,randomcol,randomrowIncrement,randomcolIncrement))
+          randomcolIncrement=Math.abs((randgen.nextInt()%2) * 2)-1;
+        }
+        else
+        {
+          randomcolIncrement=randgen.nextInt()%2;
+        }
+        for(int i=0;i<50;i++)
+        {
+          //System.out.println(randomword+" "+randomrow+" "+randomcol+" "+randomrowIncrement+" "+randomcolIncrement);
+          if(addWord(randomword,randomrow,randomcol,randomrowIncrement,randomcolIncrement))
           {
-            i=999;
+            i=49;
+            //System.out.println("Success!");
           }
           else
           {
@@ -262,7 +274,7 @@ public class WordSearch{
       String filenameCall;
       int seedCall;
       String answerCall;
-      if(args.length<3)
+      if(args.length<3||args.length>5)
       {
         System.out.println(instructions);
       }
