@@ -165,6 +165,7 @@ public class WordSearch{
     private boolean addWord(String word,int row, int col, int rowIncrement, int colIncrement){
       if((rowIncrement==0&&colIncrement==0)
       ||(Math.abs(rowIncrement)>1||Math.abs(colIncrement)>1))
+      //this checks for both increments being 0, also checked in addAllWords, but it is redundant
       {
         return false;
       }
@@ -230,6 +231,7 @@ public class WordSearch{
         {
           randomcolIncrement=randgen.nextInt()%2;
         }
+        //this checks for both increments being 0, also checked in addWords, but it is redundant
         for(int i=0;i<50;i++)
         {
           //System.out.println(randomword+" "+randomrow+" "+randomcol+" "+randomrowIncrement+" "+randomcolIncrement);
